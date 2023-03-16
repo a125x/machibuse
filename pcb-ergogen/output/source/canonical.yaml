@@ -1,0 +1,41 @@
+points:
+    zones:
+        board:
+            anchor:
+                rotate: -5
+            rows:
+                bottom: null
+                home: null
+                top: null
+            columns:
+                pinky:
+                    rows:
+                        top:
+                            skip: true
+                ring: null
+                middle: null
+                index:
+                    rows:
+                        top:
+                            skip: true
+        thumb:
+            anchor:
+                ref: board_index_bottom
+                shift:
+                    - 10
+                    - -35
+            columns:
+                home:
+                    key:
+                        spread: 21.25
+                        splay: -28
+                        origin:
+                            - -10
+                            - -10
+                far: null
+            rows:
+                thumb: null
+    rotate: -20
+    mirror:
+        ref: board_pinky_home
+        distance: 180

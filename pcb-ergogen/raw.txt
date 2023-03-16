@@ -16,12 +16,8 @@ points:
           rows:
             top.skip: true
         ring:
-          key.origin: [-12, -19]
-          key.stagger: 12
         middle:
-          key.stagger: 5
         index:
-          key.stagger: -6
           rows:
             top.skip: true
 
@@ -29,7 +25,7 @@ points:
     thumb:
       anchor:
         ref: board_index_bottom
-        shift: [22, -12]
+        shift: [10, -35]
 
       columns:
         home:
@@ -45,4 +41,4 @@ points:
   rotate: -20
   mirror:
     ref: board_pinky_home
-    distance: 223.7529778
+    distance: 180
