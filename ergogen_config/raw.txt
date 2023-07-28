@@ -1,0 +1,140 @@
+units:
+  # Proxy Spacing Variables
+  kx: cx
+  ky: cy
+  # Padding Variables
+  px: kx + 4
+  py: ky + 4
+
+points:
+  zones:
+    matrix:
+      # Fix placement on KiCAD sheet.
+      anchor:
+        shift: [125, -150]
+      key:
+        padding: 1ky
+        spread: 1kx
+      columns:
+        pinky:
+          rows.top.skip: true
+        ring:
+        middle:
+        index:
+          rows.top.skip: true
+      rows:
+        bottom:
+        home:
+        top:
+    thumb:
+      key:
+        padding: 1ky
+        spread: 1kx
+      anchor:
+        ref: matrix_index_bottom
+        shift: [2kx, -1ky]
+      columns:
+        layer:
+        space:
+      rows:
+        cluster:
+  mirror: &mirror
+    ref: matrix_index_bottom
+    distance: 3kx
+
+outlines:
+  raw:
+    - what: rectangle
+      where: true
+      size: [px, py]
+  keys:
+    - what: rectangle
+      where: true
+      size: [kx-0.5,ky-0.5]
+  board:
+    - what: polygon
+      operation: stack
+      points:
+        - ref: thumb_space_cluster
+          shift: [-2.5px, -0.5py]
+        - ref: thumb_layer_cluster
+          shift: [-2.14px, -0.5py]
+        - ref: matrix_index_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: matrix_middle_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: matrix_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: matrix_pinky_home
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_ring_home
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_ring_top
+          shift: [-0.5px, 0.5py]
+        - ref: matrix_middle_top
+          shift: [-0.5px, 0.5py]
+
+        - ref: mirror_matrix_middle_top
+          shift: [-0.5px, 0.5py]
+        - ref: mirror_matrix_ring_top
+          shift: [-0.5px, 0.5py]
+        - ref: mirror_matrix_ring_home
+          shift: [-0.5px, 0.5py]
+        - ref: mirror_matrix_pinky_home
+          shift: [-0.5px, 0.5py]
+        - ref: mirror_matrix_pinky_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: mirror_matrix_middle_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: mirror_matrix_index_bottom
+          shift: [-0.5px, -0.5py]
+        - ref: mirror_thumb_layer_cluster
+          shift: [-2.14px, -0.5py]
+        - ref: mirror_thumb_space_cluster
+          shift: [-2.5px, -0.5py]
+      fillet: 2
+  combo:
+    - name: board
+    - operation: subtract
+      name: keys
+
+pcbs:
+  machibuse:
+    outlines:
+      main:
+        outline: board  
+    footprints:
+      choc_hotswap:
+        what: choc
+        where: true
+        params:
+          keycaps: true
+          reverse: false
+          hotswap: true
+          from: "{{column_net}}"
+          to: "{{colrow}}"
+      diode:
+        what: diode
+        where: true
+        params:
+          from: "{{colrow}}"
+          to: "{{row_net}}"
+        adjust:
+          shift: [0, -5]
+      promicro:
+        what: promicro
+        params:
+          orientation: "down"
+        where:
+          ref.aggregate.parts: [matrix_index_home, mirror_matrix_index_home]
+          shift: [0, 7]
+          rotate: -90
+      reset:
+        what: button
+        params:
+          from: GND
+          to: RST
+        where:
+          ref.aggregate.parts: [matrix_index_bottom, mirror_matrix_index_bottom]
+          shift: [0, 0]
+          rotate: -90
