@@ -2,4 +2,4 @@
 
 Some of the layouts I create and use in search of the minimalistic and ergonomic endgame and pcbs for keyboards on which i'm using them.
 
-![layout](https://www.figma.com/file/U76kOsEBRkw48MskRFrctC/Untitled?type=design&node-id=1%3A2&t=6O4kXtSbVqc4HCQa-1)
+![layout](https://github.com/a125x/keeb/assets/91656458/6aa2138d-ada5-417e-8364-b262e4493b09)
