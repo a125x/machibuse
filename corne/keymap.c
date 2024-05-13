@@ -26,6 +26,31 @@ enum layers {
     _NUMS
 };
 
+enum custom_keycodes {
+  LAN_RU = SAFE_RANGE,
+  LAN_EN,
+};
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+  switch (keycode)
+  {
+    case LAN_RU:
+      if (record->event.pressed)
+      {
+          SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_R)))));
+          //SEND_STRING(LGUI_T(LALT_T(LCTL_T(KC_R))));
+      }
+      return false;
+    case LAN_EN:
+      if (record->event.pressed)
+      {
+        SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_E)))));
+      }
+      return false;
+  }
+  return true;
+}
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FIRST_EN] = LAYOUT_split_3x6_3(
   //,------------------------------------------------------------------------.     ,------------------------------------------------------------------------------.
@@ -45,7 +70,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
      KC_NO, LSFT_T(KC_Q), LGUI_T(KC_Z), LALT_T(KC_X), LCTL_T(KC_V), KC_NO,       KC_NO,          RCTL_T(KC_J), RALT_T(KC_COMM), RGUI_T(KC_DOT), RSFT_T(KC_K), KC_NO,
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
-     KC_NO, KC_CAPS,      DF(2),        KC_SLSH,      KC_QUOT,      KC_NO,       KC_NO,          KC_SCLN,      KC_BSLS,         KC_LBRC,        KC_RBRC,      KC_NO,
+     KC_NO, LAN_EN,       LAN_RU,       KC_SLSH,      KC_QUOT,      KC_NO,       KC_NO,          KC_SCLN,      KC_BSLS,         KC_LBRC,        KC_RBRC,      KC_NO,
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
                                         KC_NO,        KC_NO,        KC_NO,       LSFT_T(KC_SPC), LT(4,KC_ENT), KC_NO
                                      //`----------------------------------'     `----------------------------------------------'
@@ -69,7 +94,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
      KC_NO, LSFT_T(KC_W), LGUI_T(KC_SCLN), LALT_T(KC_LBRC), LCTL_T(KC_X), KC_NO, KC_NO,          RCTL_T(KC_Q), LSFT(KC_SLSH),   RGUI_T(KC_SLSH), RSFT_T(KC_I), KC_NO,
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
-     KC_NO, KC_CAPS,      DF(0),        KC_BSLS,      KC_QUOT,      KC_NO,       KC_NO,          KC_O,         KC_COMM,         KC_A,        KC_DOT,      KC_NO,
+     KC_NO, LAN_EN,       LAN_RU,       KC_BSLS,      KC_QUOT,      KC_NO,       KC_NO,          KC_O,         KC_COMM,         KC_A,        KC_DOT,      KC_NO,
   //|------+-------------+-------------+-------------+-------------+------|     |---------------+-------------+----------------+---------------+-------------+------|
                                         KC_NO,        KC_NO,        KC_NO,       LSFT_T(KC_SPC), LT(4,KC_ENT), KC_NO
                                      //`----------------------------------'     `----------------------------------------------'

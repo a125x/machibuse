@@ -1,0 +1,4 @@
+This is layout for remnant keyboard from ergohaven written for vial.
+
+Warning: this layout is extremely inconsistent and I tweak even major parts of it on a daily basis. I suspect I'll have to spent at least a halph of year to perfect this and make more minor fixes. For now I think only alfas layout on english I could find worthy to be named final.
+
