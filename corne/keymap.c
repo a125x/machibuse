@@ -1,6 +1,5 @@
 /*
-Copyright 2019 @foostan
-Copyright 2020 Drashna Jaelre <@drashna>
+Developed by a125x
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -29,37 +28,81 @@ enum layers {
 enum custom_keycodes {
   LAN_RU = SAFE_RANGE,
   LAN_EN,
+  BR_VOL_UP,
+  BR_VOL_DOWN,
 };
 
-bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-  switch (keycode)
-  {
-    case LAN_RU:
-      if (record->event.pressed)
-      {
-          SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_R)))));
-          //SEND_STRING(LGUI_T(LALT_T(LCTL_T(KC_R))));
-      }
-      return false;
-    case LAN_EN:
-      if (record->event.pressed)
-      {
-        SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_E)))));
-      }
-      return false;
-  }
-  return true;
+
+
+bool process_record_user(uint16_t keycode, keyrecord_t* record)
+{
+    const uint8_t mods = get_mods();
+    const uint8_t oneshot_mods = get_oneshot_mods();
+
+    switch (keycode)
+    {
+        case LAN_RU:
+            if (record->event.pressed)
+            {
+                SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_R)))));
+                default_layer_set(1U << 2);
+            }
+            return false;
+
+        case LAN_EN:
+            if (record->event.pressed)
+            {
+                SEND_STRING(SS_LGUI(SS_LALT(SS_LCTL(SS_TAP(X_E)))));
+                default_layer_set(1U << 0);
+            }
+            return false;
+
+        case BR_VOL_UP:
+            if (record->event.pressed)
+            {
+                if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+                {
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+                    unregister_mods(MOD_MASK_SHIFT);
+                    SEND_STRING(SS_TAP(X_BRIU));
+                    register_mods(mods);
+                }
+                else
+                {
+                    SEND_STRING(SS_TAP(X_VOLU));
+                }
+            }
+            return false;
+
+        case BR_VOL_DOWN:
+            if (record->event.pressed)
+            {
+                if ((mods | oneshot_mods) & MOD_MASK_SHIFT)
+                {
+                    del_oneshot_mods(MOD_MASK_SHIFT);
+                    unregister_mods(MOD_MASK_SHIFT);
+                    SEND_STRING(SS_TAP(X_BRID));
+                    register_mods(mods);
+                }
+                else
+                {
+                    SEND_STRING(SS_TAP(X_VOLD));
+                }
+            }
+          return false;
+    }
+    return true;
 }
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_FIRST_EN] = LAYOUT_split_3x6_3(
   //,------------------------------------------------------------------------.     ,------------------------------------------------------------------------------.
-     KC_NO,   KC_NO,        KC_U,         KC_F,         KC_NO,        KC_NO,        KC_NO,          KC_NO,        KC_G,         KC_Y,         KC_NO,        KC_NO,
-  //|--------+-------------+-------------+-------------+-------------+-------|     |---------------+-------------+-------------+-------------+-------------+------|
-     RGB_VAI, LSFT_T(KC_A), LGUI_T(KC_R), LALT_T(KC_S), LCTL_T(KC_T), RGB_HUI,      RGB_SAI,        RCTL_T(KC_N), RALT_T(KC_E), RGUI_T(KC_I), RSFT_T(KC_O), KC_NO,
-  //|--------+-------------+-------------+-------------+-------------+-------|     |---------------+-------------+-------------+-------------+-------------+------|
-     RGB_VAD, KC_P,         KC_M,         KC_C,         KC_D,         RGB_HUD,      RGB_SAD,        KC_H,         KC_L,         KC_W,         KC_B,         KC_NO,
-  //|--------+-------------+-------------+-------------+-------------+-------|     |---------------+-------------+-------------+-------------+-------------+------|
+     RGB_HUI, KC_NO,        KC_U,         KC_F,         KC_NO,        KC_NO,        KC_NO,         KC_NO,        KC_G,         KC_Y,         KC_NO,        RGB_HUD,
+  //|--------+-------------+-------------+-------------+-------------+-------|     |--------------+-------------+-------------+-------------+-------------+------|
+     RGB_VAI, LSFT_T(KC_A), LGUI_T(KC_R), LALT_T(KC_S), LCTL_T(KC_T), KC_NO,        KC_NO,         RCTL_T(KC_N), RALT_T(KC_E), RGUI_T(KC_I), RSFT_T(KC_O),   RGB_SAI,
+  //|--------+-------------+-------------+-------------+-------------+-------|     |--------------+-------------+-------------+-------------+-------------+------|
+     RGB_VAD, KC_P,         KC_M,         KC_C,         KC_D,         KC_NO,        KC_NO,         KC_H,         KC_L,         KC_W,         KC_B,         RGB_SAD,
+  //|--------+-------------+-------------+-------------+-------------+-------|     |--------------+-------------+-------------+-------------+-------------+------|
                                           KC_NO,        KC_BSPC,      OSL(1),       LSFT_T(KC_SPC), LT(4,KC_ENT), KC_NO
                                        //`-----------------------------------'     `-------------------------------------------'
   ),
@@ -102,7 +145,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
     [_NUMS] = LAYOUT_split_3x6_3(
   //,--------------------------------------------------------------------------------.     ,---------------------------------------------------------------------.
-     KC_NO,   KC_NO,        KC_0,         KC_1,         KC_NO,        KC_NO,                KC_NO, KC_NO,        KC_VOLU,      KC_VOLD,      KC_NO,        KC_NO,
+     KC_NO,   KC_NO,        KC_0,         KC_1,         KC_NO,        KC_NO,                KC_NO, KC_NO,        BR_VOL_UP,    BR_VOL_DOWN,  KC_NO,        KC_NO,
   //|--------+-------------+-------------+-------------+-------------+---------------|     |------+-------------+-------------+-------------+-------------+------|
      KC_NO,   LSFT_T(KC_2), LGUI_T(KC_3), LALT_T(KC_4), LCTL_T(KC_5), KC_NO,                KC_NO, KC_LEFT,      KC_UP,        KC_DOWN,      KC_RIGHT,     KC_NO,
   //|--------+-------------+-------------+-------------+-------------+---------------|     |------+-------------+-------------+-------------+-------------+------|
